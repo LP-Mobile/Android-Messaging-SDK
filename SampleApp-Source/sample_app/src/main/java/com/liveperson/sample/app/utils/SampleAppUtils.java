@@ -2,7 +2,6 @@ package com.liveperson.sample.app.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -55,6 +54,10 @@ public class SampleAppUtils {
         btn.setEnabled(false);
     }
 
+    /**
+     * Call to the {@link PushRegistrationIntentService} class which was taken from Google's
+     * sample app for GCM integration
+     */
     public static void handlePusherRegistration(Context ctx) {
         Intent intent = new Intent(ctx, PushRegistrationIntentService.class);
         ctx.startService(intent);
@@ -105,10 +108,14 @@ public class SampleAppUtils {
             );
             lpAuthenticationParams.setHostAppRedirectUri(REDIRECT_URI);
         }
-        if (!TextUtils.isEmpty(publicKey.trim())) {
-            String[] keys = publicKey.split(",");
-            for (String key : keys) {
-                lpAuthenticationParams.addCertificatePinningKey(key);
+
+        if (!publicKey.trim().isEmpty()) {
+            String[] keyPair = publicKey.split(",");
+            for (String key : keyPair) {
+                String[] pinKeyPair = key.split(";");
+                if (pinKeyPair.length == 2) {
+                    lpAuthenticationParams.addCertificatePinningKey(pinKeyPair[0], pinKeyPair[1]);
+                }
             }
         }
         return lpAuthenticationParams;
