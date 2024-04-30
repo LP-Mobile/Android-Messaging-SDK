@@ -2,7 +2,6 @@ package com.liveperson.sample.app.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -14,7 +13,7 @@ import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.model.PKCEParams;
 import com.liveperson.sample.app.FragmentContainerActivity;
 import com.liveperson.sample.app.MessagingActivity;
-import com.liveperson.sample.app.push.PushRegistrationIntentService;
+import com.liveperson.sample.app.push.PushRegistration;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -56,8 +55,7 @@ public class SampleAppUtils {
     }
 
     public static void handlePusherRegistration(Context ctx) {
-        Intent intent = new Intent(ctx, PushRegistrationIntentService.class);
-        ctx.startService(intent);
+        PushRegistration.INSTANCE.getToken(ctx);
     }
 
     /**
@@ -105,10 +103,14 @@ public class SampleAppUtils {
             );
             lpAuthenticationParams.setHostAppRedirectUri(REDIRECT_URI);
         }
-        if (!TextUtils.isEmpty(publicKey.trim())) {
-            String[] keys = publicKey.split(",");
-            for (String key : keys) {
-                lpAuthenticationParams.addCertificatePinningKey(key);
+
+        if (!publicKey.trim().isEmpty()) {
+            String[] keyPair = publicKey.split(",");
+            for (String key : keyPair) {
+                String[] pinKeyPair = key.split(";");
+                if (pinKeyPair.length == 2) {
+                    lpAuthenticationParams.addCertificatePinningKey(pinKeyPair[0], pinKeyPair[1]);
+                }
             }
         }
         return lpAuthenticationParams;
