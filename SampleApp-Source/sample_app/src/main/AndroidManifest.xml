@@ -83,14 +83,6 @@
             </intent-filter>
         </service>
 
-        <!-- This service is used to receive and register the token when it is refreshed -->
-        <service android:name=".push.PushRegistrationIntentService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
         <receiver android:name=".notification.NotificationUI$BadgeBroadcastReceiver"
             android:exported="false">
             <intent-filter>

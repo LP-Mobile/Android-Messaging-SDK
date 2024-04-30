@@ -1,7 +1,6 @@
 package com.liveperson.sample.app.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Button;
 
@@ -14,7 +13,7 @@ import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.model.PKCEParams;
 import com.liveperson.sample.app.FragmentContainerActivity;
 import com.liveperson.sample.app.MessagingActivity;
-import com.liveperson.sample.app.push.PushRegistrationIntentService;
+import com.liveperson.sample.app.push.PushRegistration;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -56,8 +55,7 @@ public class SampleAppUtils {
     }
 
     public static void handlePusherRegistration(Context ctx) {
-        Intent intent = new Intent(ctx, PushRegistrationIntentService.class);
-        ctx.startService(intent);
+        PushRegistration.INSTANCE.getToken(ctx);
     }
 
     /**

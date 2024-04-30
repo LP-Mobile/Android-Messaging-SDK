@@ -3,10 +3,14 @@ package com.liveperson.sample.app.push.fcm;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.liveperson.infra.PushType;
 import com.liveperson.infra.model.PushMessage;
 import com.liveperson.messaging.sdk.api.LivePerson;
+import com.liveperson.sample.app.push.PushRegistration;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.notification.NotificationUI;
 
@@ -77,4 +81,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 	// [END receive_message]
 
+
+	@Override
+	public void onNewToken(@NonNull String s) {
+		PushRegistration.INSTANCE.registerLPPusher(this, s, PushType.FCM);
+	}
 }
