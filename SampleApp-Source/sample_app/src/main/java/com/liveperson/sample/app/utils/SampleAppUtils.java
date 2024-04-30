@@ -1,7 +1,7 @@
 package com.liveperson.sample.app.utils;
 
 import android.content.Context;
-import android.text.TextUtils;
+import android.content.Intent;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -103,10 +103,14 @@ public class SampleAppUtils {
             );
             lpAuthenticationParams.setHostAppRedirectUri(REDIRECT_URI);
         }
-        if (!TextUtils.isEmpty(publicKey.trim())) {
-            String[] keys = publicKey.split(",");
-            for (String key : keys) {
-                lpAuthenticationParams.addCertificatePinningKey(key);
+
+        if (!publicKey.trim().isEmpty()) {
+            String[] keyPair = publicKey.split(",");
+            for (String key : keyPair) {
+                String[] pinKeyPair = key.split(";");
+                if (pinKeyPair.length == 2) {
+                    lpAuthenticationParams.addCertificatePinningKey(pinKeyPair[0], pinKeyPair[1]);
+                }
             }
         }
         return lpAuthenticationParams;

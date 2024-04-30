@@ -1,31 +1,20 @@
-**Release date:** March 15, 2024
+**Release date:** April 12, 2024
 
 # Overview
 
-Android Mobile Messaging SDK version 5.20.2 release includes enhancements and bug fixes.
+Android Mobile Messaging SDK version 5.21.0-beta01 release contains:
 
-## Environment requirements
+- SDK now allows users to switch to picture-in-picture mode. This allows users to minimize the call view while the call is still active and see/interact with the chat view.
+  `lp_cobrowse_picture_in_picture_enabled = true`
 
-The Android Mobile Messaging SDK version 5.20.2 uses:
+- SDK can now render the Welcome Message that has been set on Window Configuration on Mobile Engagement. Reach out to your account representative to enable and adjust.
 
-- Minimum API version 21
-- Compile API version 34
-- Target API version 34
-- Maps SDK "com.google.android.gms:play-services-maps:18.1.0"
-- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.4”
-- Date Picker Library “com.liveperson.android:lp-date-picker:2.1.0”
-- Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.0"
+- Replace `addCertificatePinningKey(String publicKey)` by `addCertificatePinningKey(String domain, String publicKey)`
 
-## Enhancements
+- Upgrade `com.nimbusds:nimbus-jose-jwt` version to 9.37.3
 
-- Support alternatives to swiping in the carousel component for accessibility users. Check [here](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_sc_carousel_navigation_buttons_appearance) for more info.
-- Replace accessibility configuration [`lp_announce_events_sequentially`](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_events_sequentially) by [`lp_announce_events_with_live_region`](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_events_with_live_region).
-- Accessibility improvement on announcing newly received messages.
+- Remove thumbnail size configuration `thumbnail_longer_dimension_resize`. The default value = 100 will be used.
 
-## Bugs fixed
-
-- Fixed [INVALID_SDK_VERSION](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-callbacks-index.html#lperror-enum) callbacks takes long time to fire [LP_ON_ERROR_TYPE_INTENT_ACTION](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-callbacks-index.html#multi-type-error-indication).
-- Added custom implementation of FileProvider to prevent collision with libraries and app that are relying on default FileProvider.
-- Internal bug fixes.
+- Crashes fixed.
 
 Please note, the SDK can be integrated to the app using Gradle dependency. For more information please refer to [the developers community](https://developers.liveperson.com/android-quickstart.html).
