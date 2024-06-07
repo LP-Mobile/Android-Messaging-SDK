@@ -2,18 +2,6 @@
 
 # Overview
 
-## Environment requirements
-
-The Android Mobile Messaging SDK version 5.21.0 uses:
-
-- Minimum API version 21
-- Compile API version 34
-- Target API version 34
-- Maps SDK "com.google.android.gms:play-services-maps:18.1.0"
-- Structured Content Library “com.liveperson.android:lp_structured_content:2.6.5”
-- Date Picker Library “com.liveperson.android:lp-date-picker:2.1.0”
-- Appointment List Library "com.liveperson.android:lp-appointment-scheduler:2.0.0"
-
 Android Mobile Messaging SDK version 5.22.0-beta01 release contains:
 
 - Compose support of ConversationFragment is now available. Example of `ConversationFragment` integration to compose ui could be found [here](https://github.com/LP-Messaging/sampleapp-compose).
