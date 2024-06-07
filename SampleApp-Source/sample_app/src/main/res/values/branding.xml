@@ -490,4 +490,6 @@
     <item name="lp_carousel_navigation_move_to_previous_icon" type="drawable">@drawable/ic_carousel_move_to_previous</item>
     <item name="lp_carousel_navigation_move_to_next_icon" type="drawable">@drawable/ic_carousel_move_next</item>
 
+    <!--File sharing flow-->
+    <bool name="lp_is_consumer_file_caption_enabled">true</bool>
 </resources>

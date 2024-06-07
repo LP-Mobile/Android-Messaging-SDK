@@ -8,45 +8,39 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
 import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.LPConversationsHistoryStateToDisplay;
+import com.liveperson.infra.auth.LPAuthenticationParams;
 import com.liveperson.infra.auth.LPAuthenticationType;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
-import com.liveperson.infra.callbacks.PKCEParamsCallBack;
 import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
-import com.liveperson.infra.model.PKCEParams;
-import com.liveperson.infra.model.errors.PkceGenerateError;
-import com.liveperson.messaging.sdk.api.LPConfig;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.databinding.ActivityMessagingBinding;
 import com.liveperson.sample.app.notification.NotificationUI;
+import com.liveperson.sample.app.push.fcm.MyFirebaseMessagingService;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,28 +63,9 @@ public class MessagingActivity extends AppCompatActivity {
 	public static final String VISITOR_ID_KEY = "visitorId";
 	public static final String ENGAGEMENT_CONTEXT_ID_KEY = "engagementContextId";
 
-	private Spinner authTypeSpinner;
-	private EditText mFirstNameView;
-	private EditText mLastNameView;
-	private EditText mPhoneNumberView;
-	private EditText mAuthCodeView;
-	private EditText mPublicKey;
-	private Button mOpenConversationButton;
-	private TextView mTime;
-	private TextView mDate;
-	private CheckBox mCallbackToastCheckBox;
-	private CheckBox mReadOnlyModeCheckBox;
-	private EditText mCampaignIdEditText;
-	private EditText mEngagementIdEditText;
-	private EditText mSessionIdEditText;
-	private EditText mVisitorIdEditText;
-	private EditText mEngagementContextIdEditText;
+	private ActivityMessagingBinding binding;
 	private boolean isFromPush;
 	private String notificationId;
-	private CheckBox mStepupAuthenCheckBox;
-	private SwitchCompat mPkceSwitcher;
-
-	private ActivityMessagingBinding binding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,21 +84,6 @@ public class MessagingActivity extends AppCompatActivity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		handlePush(intent);
-
-		// handle auth login
-		handleAuthLoginDeepLink(intent);
-	}
-
-	private void handleAuthLoginDeepLink(Intent intent) {
-		if (intent != null && intent.getDataString() != null) {
-			Uri callbackURI = Uri.parse(intent.getDataString());
-			Log.d(TAG, "callbackURI " + callbackURI.toString());
-			String code = callbackURI.getQueryParameter("code");
-			Log.d(TAG, "code " + code);
-			if (code != null && code.length() > 0) {
-				SampleAppStorage.getInstance(this).setAuthCode(code);
-			}
-		}
 	}
 
 	/**
@@ -132,69 +92,39 @@ public class MessagingActivity extends AppCompatActivity {
 	private void initSampleAppViews() {
 		initAuthTypeSpinner();
 
-		mFirstNameView = findViewById(R.id.first_name);
-		mFirstNameView.setText(SampleAppStorage.getInstance(this).getFirstName());
+		binding.firstName.setText(SampleAppStorage.getInstance(this).getFirstName());
 
-		mLastNameView = findViewById(R.id.last_name);
-		mLastNameView.setText(SampleAppStorage.getInstance(this).getLastName());
+		binding.lastName.setText(SampleAppStorage.getInstance(this).getLastName());
 
-		mPhoneNumberView = findViewById(R.id.phone_number);
-		mPhoneNumberView.setText(SampleAppStorage.getInstance(this).getPhoneNumber());
+		binding.phoneNumber.setText(SampleAppStorage.getInstance(this).getPhoneNumber());
 
-		mAuthCodeView = findViewById(R.id.auth_code);
-		mAuthCodeView.setText(SampleAppStorage.getInstance(this).getAuthCode());
+		binding.authCode.setText(SampleAppStorage.getInstance(this).getAuthCode());
 
-		mPublicKey = findViewById(R.id.public_key);
-		mPublicKey.setText(SampleAppStorage.getInstance(this).getPublicKey());
+		binding.publicKey.setText(SampleAppStorage.getInstance(this).getPublicKey());
 
 		String sdkVersion = String.format("SDK version %1$s ", LivePerson.getSDKVersion());
 		((TextView) findViewById(R.id.sdk_version)).setText(sdkVersion);
 
-		mTime = findViewById(R.id.time_sample_textView);
-		mDate = findViewById(R.id.date_sample_textView);
+		binding.campaignId.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
 
-		mCallbackToastCheckBox = findViewById(R.id.check_box_toasts);
-		mReadOnlyModeCheckBox = findViewById(R.id.check_box_read_only);
+		binding.engagementId.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
 
-		mCampaignIdEditText = findViewById(R.id.campaign_id);
-		mCampaignIdEditText.setText(getIntent().getStringExtra(CAMPAIGN_ID_KEY));
+		binding.sessionId.setText(getIntent().getStringExtra(SESSION_ID_KEY));
 
-		mEngagementIdEditText = findViewById(R.id.engagement_id);
-		mEngagementIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_ID_KEY));
+		binding.visitorId.setText(getIntent().getStringExtra(VISITOR_ID_KEY));
 
-		mSessionIdEditText = findViewById(R.id.session_id);
-		mSessionIdEditText.setText(getIntent().getStringExtra(SESSION_ID_KEY));
-
-		mVisitorIdEditText = findViewById(R.id.visitor_id);
-		mVisitorIdEditText.setText(getIntent().getStringExtra(VISITOR_ID_KEY));
-
-		mEngagementContextIdEditText = findViewById(R.id.engagement_context_id);
-		mEngagementContextIdEditText.setText(getIntent().getStringExtra(ENGAGEMENT_CONTEXT_ID_KEY));
-
-		mStepupAuthenCheckBox = findViewById(R.id.check_box_stepup_authen);
+		binding.engagementContextId.setText(getIntent().getStringExtra(ENGAGEMENT_CONTEXT_ID_KEY));
 
 		updateTime();
 		initLocaleSpinner();
 
 		setBadgeButton();
-
-		//pkce
-		initPkce();
-
-		if (LPConfig.get(R.bool.lp_is_offline_messaging_enabled)) {
-			binding.checkBoxOfflineMessaging.setChecked(true);
-		}
-
-		binding.checkBoxOfflineMessaging.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			LPConfig.set(R.bool.lp_is_offline_messaging_enabled, isChecked);
-		});
 	}
 
 	private void initAuthTypeSpinner() {
-		authTypeSpinner = findViewById(R.id.auth_type_spinner);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.supported_auth_types));
-		authTypeSpinner.setAdapter(adapter);
-		authTypeSpinner.setSelection(SampleAppStorage.getInstance(this).getAuthenticateItemPosition());
+		binding.authTypeSpinner.setAdapter(adapter);
+		binding.authTypeSpinner.setSelection(SampleAppStorage.getInstance(this).getAuthenticateItemPosition());
 	}
 
 	private void setBadgeButton() {
@@ -212,55 +142,13 @@ public class MessagingActivity extends AppCompatActivity {
 		}));
 	}
 
-	private void initPkce() {
-		Button generate = findViewById(R.id.generate_pkce_param);
-		generate.setOnClickListener(v -> {
-			generatePkce();
-		});
-
-		mPkceSwitcher = findViewById(R.id.enable_pkce);
-		mPkceSwitcher.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			SampleAppStorage.getInstance(this).setPkceEnabled(isChecked);
-		});
-	}
-
-	private void generatePkce() {
-		PKCEParamsCallBack callback = new PKCEParamsCallBack() {
-			@Override
-			public void onPKCEGenerateSuccess(@NonNull PKCEParams pkceParams) {
-				Log.d(TAG, pkceParams.toString());
-				// store code verifier to use later
-				SampleAppStorage.getInstance(getBaseContext()).setCodeVerifier(pkceParams.getCodeVerifier());
-
-				// generate auth endpoint and open using system browser to login
-				try {
-					String authEndpoint = SampleAppUtils.generateAuthorizeEndpoint(pkceParams);
-					Log.d(TAG, "authEndpoint: " + authEndpoint);
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(authEndpoint));
-					startActivity(browserIntent);
-				} catch (UnsupportedEncodingException e) {
-					Log.e(TAG, "Exception when generate auth endpoint: " + e.getMessage());
-				}
-			}
-
-			@Override
-			public void onPKCEGenerateFailed(@NonNull PkceGenerateError pkceGenerateError) {
-
-			}
-		};
-
-		LivePerson.getPKCEParams(this, SampleAppUtils.createLPAuthParams(this), callback);
-
-	}
-
-
 	private void updateTime() {
 		Locale locale = getLocale();
 		DateFormat formatTime = DateFormat.getTimeInstance(DateFormat.MEDIUM, locale);
 		DateFormat formatDate = DateFormat.getDateInstance(DateFormat.LONG, locale);
 		Date date = new Date(System.currentTimeMillis());
-		mDate.setText(formatDate.format(date));
-		mTime.setText(formatTime.format(date));
+		binding.dateSampleTextView.setText(formatDate.format(date));
+		binding.timeSampleTextView.setText(formatTime.format(date));
 	}
 
 	private void initLocaleSpinner() {
@@ -309,11 +197,10 @@ public class MessagingActivity extends AppCompatActivity {
 	 * Set the listener on the "open_conversation" button (Activity mode)
 	 */
 	private void initOpenConversationButton() {
-		mOpenConversationButton = findViewById(R.id.button_start_activity);
-		mOpenConversationButton.setOnClickListener(v -> {
+		binding.buttonStartActivity.setOnClickListener(v -> {
 			//Sample app setting - used to initialize the SDK with "Activity mode" when entering from push notification
 			SampleAppStorage.getInstance(MessagingActivity.this).setSDKMode(SampleAppStorage.SDKMode.ACTIVITY);
-			SampleAppUtils.disableButtonAndChangeText(mOpenConversationButton, getString(R.string.initializing));
+			SampleAppUtils.disableButtonAndChangeText(binding.buttonStartActivity, getString(R.string.initializing));
 			storeData();
 			removeNotification();
 			initActivityConversation();
@@ -330,7 +217,7 @@ public class MessagingActivity extends AppCompatActivity {
 			SampleAppStorage.getInstance(MessagingActivity.this).setSDKMode(SampleAppStorage.SDKMode.FRAGMENT);
 			storeData();
 			removeNotification();
-			MainApplication.getInstance().setShowToastOnCallback(mCallbackToastCheckBox.isChecked());
+			MainApplication.getInstance().setShowToastOnCallback(binding.checkBoxToasts.isChecked());
 			openFragmentContainer();
 		});
 	}
@@ -351,17 +238,19 @@ public class MessagingActivity extends AppCompatActivity {
 				//we are not setting a call back here - we'll listen to callbacks with broadcast receiver
 				// in main application class.
 				//setCallBack();
-				MainApplication.getInstance().setShowToastOnCallback(mCallbackToastCheckBox.isChecked());
+				MainApplication.getInstance().setShowToastOnCallback(binding.checkBoxToasts.isChecked());
+				// you can't register pusher before initialization
+				SampleAppUtils.handlePusherRegistration(MessagingActivity.this);
 				runOnUiThread(() -> {
 					openActivity();
-					SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_activity));
+					SampleAppUtils.enableButtonAndChangeText(binding.buttonStartActivity, getString(R.string.open_activity));
 				});
 			}
 
 			@Override
 			public void onInitFailed(Exception e) {
 				runOnUiThread(() -> {
-					SampleAppUtils.enableButtonAndChangeText(mOpenConversationButton, getString(R.string.open_activity));
+					SampleAppUtils.enableButtonAndChangeText(binding.buttonStartActivity, getString(R.string.open_activity));
 					Toast.makeText(MessagingActivity.this, "Init Failed", Toast.LENGTH_SHORT).show();
 				});
 			}
@@ -398,9 +287,9 @@ public class MessagingActivity extends AppCompatActivity {
 		LivePerson.showConversation(MessagingActivity.this, SampleAppUtils.createLPAuthParams(this), params);
 
 		ConsumerProfile consumerProfile = new ConsumerProfile.Builder()
-				.setFirstName(mFirstNameView.getText().toString())
-				.setLastName(mLastNameView.getText().toString())
-				.setPhoneNumber(mPhoneNumberView.getText().toString())
+				.setFirstName(binding.firstName.getText().toString())
+				.setLastName(binding.lastName.getText().toString())
+				.setPhoneNumber(binding.phoneNumber.getText().toString())
 				.build();
 		LivePerson.setUserProfile(consumerProfile);
 
@@ -409,9 +298,6 @@ public class MessagingActivity extends AppCompatActivity {
 		Notification.Builder downloadBuilder = NotificationUI.createDownloadNotificationBuilder(getApplicationContext());
 		LivePerson.setImageServiceUploadNotificationBuilder(uploadBuilder);
 		LivePerson.setImageServiceDownloadNotificationBuilder(downloadBuilder);
-
-		// you can't register pusher before initialization
-		SampleAppUtils.handlePusherRegistration(MessagingActivity.this);
 	}
 
 	@SuppressWarnings("unused")
@@ -432,7 +318,7 @@ public class MessagingActivity extends AppCompatActivity {
 	}
 
 	private boolean isReadOnly() {
-		return mReadOnlyModeCheckBox.isChecked();
+		return binding.checkBoxReadOnly.isChecked();
 	}
 
 	/**
@@ -524,34 +410,27 @@ public class MessagingActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		LPAuthenticationParams lpAuthenticationParams = SampleAppUtils.createLPAuthParams(this);
-//		if (lpAuthenticationParams.getAuthType() == LPAuthenticationType.AUTH && TextUtils.isEmpty(lpAuthenticationParams.getAuthKey())) {
-//			lpAuthenticationParams = null;
-//		}
-//		LivePerson.getUnreadMessagesCount(SampleAppStorage.getInstance(MessagingActivity.this).getAccount(), lpAuthenticationParams, new ICallback<Integer, Exception>() {
-//			@Override
-//			public void onSuccess(Integer count) {
-//				updateToolBar(count);
-//			}
-//
-//			@Override
-//			public void onError(Exception e) {
-//				Log.e(TAG, "Failed to get unread messages count");
-//			}
-//		});
+		LPAuthenticationParams lpAuthenticationParams = SampleAppUtils.createLPAuthParams(this);
+		if (lpAuthenticationParams.getAuthType() == LPAuthenticationType.AUTH && TextUtils.isEmpty(lpAuthenticationParams.getAuthKey())) {
+			lpAuthenticationParams = null;
+		}
+		LivePerson.getUnreadMessagesCount(SampleAppStorage.getInstance(MessagingActivity.this).getAccount(), lpAuthenticationParams, new ICallback<Integer, Exception>() {
+			@Override
+			public void onSuccess(Integer count) {
+				updateToolBar(count);
+			}
+
+			@Override
+			public void onError(Exception e) {
+				Log.e(TAG, "Failed to get unread messages count");
+			}
+		});
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter, RECEIVER_NOT_EXPORTED);
 		} else {
 			registerReceiver(unreadMessagesCounter, unreadMessagesCounterFilter);
 		}
-
-		// update auth code if it's available
-		String authCode = SampleAppStorage.getInstance(this).getAuthCode();
-		if (!TextUtils.isEmpty(authCode) && mAuthCodeView != null) {
-			mAuthCodeView.setText(authCode);
-		}
-		mPkceSwitcher.setChecked(SampleAppStorage.getInstance(this).isPkceEnabled());
 	}
 
 	@Override
@@ -567,7 +446,7 @@ public class MessagingActivity extends AppCompatActivity {
 	 */
 	private LPAuthenticationType getAuthType() {
 		LPAuthenticationType authType;
-		switch (authTypeSpinner.getSelectedItemPosition()) {
+		switch (binding.authTypeSpinner.getSelectedItemPosition()) {
 			case 0:
 				authType = LPAuthenticationType.AUTH;
 				break;
@@ -584,51 +463,51 @@ public class MessagingActivity extends AppCompatActivity {
 
 	private void storeData() {
 
-		String firstName = mFirstNameView.getText().toString().trim();
-		String lastName = mLastNameView.getText().toString().trim();
-		String phoneNumber = mPhoneNumberView.getText().toString().trim();
-		String authCode = mAuthCodeView.getText().toString().trim();
-		String publicKey = mPublicKey.getText().toString().trim();
-		SampleAppStorage.getInstance(this).setAuthenticateItemPosition(authTypeSpinner.getSelectedItemPosition());
+		String firstName = binding.firstName.getText().toString().trim();
+		String lastName = binding.lastName.getText().toString().trim();
+		String phoneNumber = binding.phoneNumber.getText().toString().trim();
+		String authCode = binding.authCode.getText().toString().trim();
+		String publicKey = binding.publicKey.getText().toString().trim();
+		SampleAppStorage.getInstance(this).setAuthenticateItemPosition(binding.authTypeSpinner.getSelectedItemPosition());
 		SampleAppStorage.getInstance(this).setAuthenticateTypeOrdinal(getAuthType().ordinal());
 		SampleAppStorage.getInstance(this).setFirstName(firstName);
 		SampleAppStorage.getInstance(this).setLastName(lastName);
 		SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
 		SampleAppStorage.getInstance(this).setAuthCode(authCode);
 		SampleAppStorage.getInstance(this).setPublicKey(publicKey);
-		SampleAppStorage.getInstance(this).setPerformStepUpAuthentication(mStepupAuthenCheckBox.isChecked());
+		SampleAppStorage.getInstance(this).setPerformStepUpAuthentication(binding.checkBoxStepupAuthen.isChecked());
 
 		// Store CampaignId if available
-		if (!TextUtils.isEmpty(mCampaignIdEditText.getText().toString())) {
-			SampleAppStorage.getInstance(this).setCampaignId(Long.valueOf(mCampaignIdEditText.getText().toString()));
+		if (!TextUtils.isEmpty(binding.campaignId.getText().toString())) {
+			SampleAppStorage.getInstance(this).setCampaignId(Long.valueOf(binding.campaignId.getText().toString()));
 		} else {
 			SampleAppStorage.getInstance(this).setCampaignId(null);
 		}
 
 		// Store EngagementId if available
-		if (!TextUtils.isEmpty(mEngagementIdEditText.getText().toString())) {
-			SampleAppStorage.getInstance(this).setEngagementId(Long.valueOf(mEngagementIdEditText.getText().toString()));
+		if (!TextUtils.isEmpty(binding.engagementId.getText().toString())) {
+			SampleAppStorage.getInstance(this).setEngagementId(Long.valueOf(binding.engagementId.getText().toString()));
 		} else {
 			SampleAppStorage.getInstance(this).setEngagementId(null);
 		}
 
 		// Store SessionId if available
-		if (!TextUtils.isEmpty(mSessionIdEditText.getText().toString())) {
-			SampleAppStorage.getInstance(this).setSessionId(mSessionIdEditText.getText().toString());
+		if (!TextUtils.isEmpty(binding.sessionId.getText().toString())) {
+			SampleAppStorage.getInstance(this).setSessionId(binding.sessionId.getText().toString());
 		} else {
 			SampleAppStorage.getInstance(this).setSessionId(null);
 		}
 
 		// Store VisitorId if available
-		if (!TextUtils.isEmpty(mVisitorIdEditText.getText().toString())) {
-			SampleAppStorage.getInstance(this).setVisitorId(mVisitorIdEditText.getText().toString());
+		if (!TextUtils.isEmpty(binding.visitorId.getText().toString())) {
+			SampleAppStorage.getInstance(this).setVisitorId(binding.visitorId.getText().toString());
 		} else {
 			SampleAppStorage.getInstance(this).setVisitorId(null);
 		}
 
 		// Store EngagementContextId if available
-		if (!TextUtils.isEmpty(mEngagementContextIdEditText.getText().toString())) {
-			SampleAppStorage.getInstance(this).setInteractionContextId(mEngagementContextIdEditText.getText().toString());
+		if (!TextUtils.isEmpty(binding.engagementContextId.getText().toString())) {
+			SampleAppStorage.getInstance(this).setInteractionContextId(binding.engagementContextId.getText().toString());
 		} else {
 			SampleAppStorage.getInstance(this).setInteractionContextId(null);
 		}

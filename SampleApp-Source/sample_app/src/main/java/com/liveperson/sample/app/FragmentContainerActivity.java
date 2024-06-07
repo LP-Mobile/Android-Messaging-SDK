@@ -2,12 +2,14 @@ package com.liveperson.sample.app;
 
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,16 +20,20 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.liveperson.infra.CampaignInfo;
 import com.liveperson.infra.ConversationViewParams;
+import com.liveperson.infra.ICallback;
 import com.liveperson.infra.InitLivePersonProperties;
 import com.liveperson.infra.callbacks.InitLivePersonCallBack;
 import com.liveperson.infra.messaging_ui.fragment.ConversationFragment;
 import com.liveperson.infra.model.LPWelcomeMessage;
 import com.liveperson.infra.model.MessageOption;
+import com.liveperson.messaging.hybrid.commands.exceptions.HybridSDKException;
 import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.dialogs.DynamicWelcomeMessageDialog;
@@ -37,6 +43,8 @@ import com.liveperson.sample.app.utils.SampleAppUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import kotlin.Unit;
 
 /**
  * ***** Sample app class - Not related to Messaging SDK ****
@@ -50,14 +58,28 @@ public class FragmentContainerActivity extends AppCompatActivity {
     public static final String KEY_READ_ONLY = "read_only";
     private ConversationFragment mConversationFragment;
 
+    private static final String KEY_READ_ONLY_MODE = "mode.read_only";
     private static final String TAG_WELCOME_MESSAGE_DIALOG = "dialog.welcome.id";
+
+    private Button mSendRandomMessageButton;
+    private Button mOpenCameraButton;
+    private Button mOpenGalleryButton;
+    private Button mOpenFileChooserButton;
+    private SwitchCompat mChangeReadOnlyModeSwitch;
+
+    private boolean mIsReadonlyMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom);
-        Log.i(TAG, "onCreate savedInstanceState = " + savedInstanceState );
-
+        if (savedInstanceState == null) {
+            mIsReadonlyMode = isReadOnly();
+        } else {
+            mIsReadonlyMode = savedInstanceState.getBoolean(KEY_READ_ONLY_MODE, false);
+        }
+        Log.i(TAG, "onCreate savedInstanceState = " + savedInstanceState);
+        setupHybridSDKActionButtons();
         LivePerson.initialize(getApplicationContext(), new InitLivePersonProperties(SampleAppStorage.getInstance(this).getAccount(), SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, new InitLivePersonCallBack() {
 
             @Override
@@ -95,6 +117,89 @@ public class FragmentContainerActivity extends AppCompatActivity {
                 Log.e(TAG, "onInitFailed : " + e.getMessage());
             }
         }));
+    }
+
+    private void setupHybridSDKActionButtons() {
+        mOpenCameraButton = findViewById(R.id.button_open_camera);
+        if (mOpenCameraButton != null) {
+            mOpenCameraButton.setOnClickListener(v -> {
+                startCameraFileSharingFlow();
+            });
+        }
+        mOpenGalleryButton = findViewById(R.id.button_open_gallery);
+        if (mOpenGalleryButton != null) {
+            mOpenGalleryButton.setOnClickListener(v -> {
+                startPhotoPickerFileSharingFlow();
+            });
+        }
+        mOpenFileChooserButton = findViewById(R.id.button_open_file_chooser);
+        if (mOpenFileChooserButton != null) {
+            mOpenFileChooserButton.setOnClickListener(v -> {
+                startFileChooserSharingFlow();
+            });
+        }
+        mSendRandomMessageButton = findViewById(R.id.button_send_text);
+        mSendRandomMessageButton.setOnClickListener(v -> {
+            sendRandomMessage();
+        });
+        mChangeReadOnlyModeSwitch = findViewById(R.id.view_only_mode_switch);
+        if (mChangeReadOnlyModeSwitch != null) {
+            mChangeReadOnlyModeSwitch.setChecked(mIsReadonlyMode);
+            mChangeReadOnlyModeSwitch.jumpDrawablesToCurrentState();
+            mChangeReadOnlyModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                changeReadOnlyModeValue(isChecked);
+            });
+        }
+    }
+
+    private void sendRandomMessage() {
+        String message = String.format("Random message %d", System.currentTimeMillis());
+        LivePerson.sendTextMessage(message, new HybridSDKCallback(this));
+    }
+
+    private void startCameraFileSharingFlow() {
+        LivePerson.fileSharingOpenCamera(new HybridSDKCallback(this));
+    }
+
+    private void startPhotoPickerFileSharingFlow() {
+        LivePerson.fileSharingOpenGallery(new HybridSDKCallback(this));
+    }
+
+    private void startFileChooserSharingFlow() {
+        LivePerson.fileSharingOpenFile(new HybridSDKCallback(this));
+    }
+
+    private void changeReadOnlyModeValue(boolean isReadonlyMode) {
+        mIsReadonlyMode = isReadonlyMode;
+        LivePerson.changeReadOnlyMode(isReadonlyMode, new HybridSDKCallback(this));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState != null) {
+            outState.putBoolean(KEY_READ_ONLY_MODE, mIsReadonlyMode);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mChangeReadOnlyModeSwitch != null) {
+            mChangeReadOnlyModeSwitch.setOnCheckedChangeListener(null);
+        }
+        if (mSendRandomMessageButton != null) {
+            mSendRandomMessageButton.setOnClickListener(null);
+        }
+        if (mOpenCameraButton != null) {
+            mOpenCameraButton.setOnClickListener(null);
+        }
+        if (mOpenGalleryButton != null) {
+            mOpenGalleryButton.setOnClickListener(null);
+        }
+        if (mOpenFileChooserButton != null) {
+            mOpenFileChooserButton.setOnClickListener(null);
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -269,4 +374,23 @@ public class FragmentContainerActivity extends AppCompatActivity {
         layout_panel.setLayoutParams(params);
     }
 
+    private static class HybridSDKCallback implements ICallback<Unit, HybridSDKException> {
+
+        private final Context context;
+
+        private HybridSDKCallback(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void onSuccess(Unit value) {
+            Log.d(TAG, "Successfully finished hybrid call");
+        }
+
+        @Override
+        public void onError(HybridSDKException exception) {
+            String message = exception.getMessage() == null ? exception.toString() : exception.getMessage();
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
