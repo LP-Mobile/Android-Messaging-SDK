@@ -1,12 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/container"
-             xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/custom_fragment_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/custom_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <HorizontalScrollView
+            android:id="@+id/hybrid_sdk_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_send_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_button"
+                    android:layout_marginHorizontal="3dp"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/hybrid_action_send_random_text" />
+
+                <Button
+                    android:id="@+id/button_open_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_button"
+                    android:layout_marginHorizontal="3dp"
+                    android:textColor="#FFFFFF"
+                    android:drawableStart="@drawable/lpmessaging_ui_ic_camera"
+                    android:text="@string/hybrid_action_open_camera" />
+
+                <Button
+                    android:id="@+id/button_open_gallery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:background="@drawable/rounded_button"
+                    android:layout_marginHorizontal="3dp"
+                    android:textColor="#FFFFFF"
+                    android:drawableStart="@drawable/lpmessaging_ui_ic_gallery"
+                    android:text="@string/hybrid_action_open_gallery" />
+
+                <Button
+                    android:id="@+id/button_open_file_chooser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_button"
+                    android:layout_marginHorizontal="3dp"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/hybrid_action_open_file_chooser" />
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/view_only_mode_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_button"
+                    android:layout_marginHorizontal="3dp"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/hybrid_action_change_view_only_mode" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+    </LinearLayout>
+
 
 </FrameLayout>

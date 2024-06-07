@@ -37,15 +37,14 @@
     <string name="hint_quick_reply_actions">Quick Reply actions</string>
     <string name="hint_option_text">Option text</string>
     <string name="hint_timeout">Timeout</string>
+    <string name="heading_welcome_message_option_style">Option Style</string>
+    <string name="text_contains_style">Option Style</string>
     <string name="heading_welcome_message_frequency">Welcome Message frequency</string>
     <string name="text_first_conversation_option">First conversation</string>
     <string name="text_every_conversation_option">Every conversation</string>
     <string name="text_action_apply">Apply</string>
     <string name="title_action_set_welcome_message">Set welcome message</string>
     <string name="toast_message_max_options_quanity">Maximum of message options quantity was reached.</string>
-
-    <string name="heading_welcome_message_option_style">Option Style</string>
-    <string name="text_contains_style">Option Style</string>
     <string name="hint_option_text_color">Text color</string>
     <string name="hint_option_border_color">Border color</string>
     <string name="hint_option_background_color">Background color</string>
@@ -57,9 +56,18 @@
     <string name="heading_option_style">Option style</string>
     <string name="text_attach_style">Attach style</string>
 
-    <string name="text_generate_pkce" translatable="false">Generate PKCE</string>
-    <string name="pkce_enable" translatable="false">Enable PKCE</string>
+    <!--Carousel navigation buttons -->
+    <string name="lp_carousel_navigation_previous_button_content_description">Previous</string>
+    <string name="lp_carousel_navigation_next_button_content_description">Next</string>
+    <string name="lp_carousel_card_order_announcement">Card %d of %d, %s</string>
+    <string name="hybrid_action_send_random_text">Send random text</string>
+    <string name="hybrid_action_open_camera">Open camera</string>
+    <string name="hybrid_action_open_gallery">Open gallery</string>
+    <string name="hybrid_action_open_file_chooser">Open file chooser</string>
+    <string name="hybrid_action_change_view_only_mode">Change View only mode</string>
     <string name="enable_stepup_authen">Enable StepUp Authen</string>
-    <string name="enable_offline_messaging">Enable Offline Messaging</string>
+    <string name="enable_offline_messaging">Enable offline messaging\n</string>
+    <string name="text_generate_pkce">Generate PKCE</string>
+    <string name="pkce_enable">Enable PKCE</string>
 
 </resources>
