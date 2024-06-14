@@ -15,6 +15,7 @@ import com.liveperson.messaging.sdk.api.LivePerson
 import com.liveperson.sample.app.push.PushUtils.isGooglePlayServicesAvailable
 //import com.liveperson.sample.app.push.PushUtils.isHuaweiServicesAvailable
 import com.liveperson.sample.app.utils.SampleAppStorage
+import com.liveperson.sample.app.utils.SampleAppUtils.createLPAuthParams
 
 object PushRegistration {
 
@@ -40,7 +41,8 @@ object PushRegistration {
 	fun registerLPPusher(context: Context, token: String?, pushType: PushType) {
 		val brandId = SampleAppStorage.getInstance(context).account
 		Log.i(TAG, "registerLPPusher: $token")
-		LivePerson.registerLPPusher(brandId, SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, token, pushType, createLPAuthParams(context), object : ICallback<Void, Exception> {
+		val params = createLPAuthParams(context)
+		LivePerson.registerLPPusher(brandId, SampleAppStorage.SDK_SAMPLE_FCM_APP_ID, token, pushType, params, object : ICallback<Void, Exception> {
 			override fun onSuccess(value: Void?) {
 				Log.d(TAG, "Registration to Pusher completed successfully")
 			}
@@ -50,27 +52,4 @@ object PushRegistration {
 			}
 		})
 	}
-
-	private fun createLPAuthParams(context: Context): LPAuthenticationParams {
-		val authCode = SampleAppStorage.getInstance(context).authCode
-		val publicKey = SampleAppStorage.getInstance(context).publicKey
-
-		val lpAuthenticationParams = LPAuthenticationParams(LPAuthenticationType.AUTH)
-		lpAuthenticationParams.authKey = authCode
-
-		if (publicKey.trim { it <= ' ' }.isNotEmpty()) {
-			val keyPair = publicKey.split(",".toRegex()).dropLastWhile { it.isEmpty() }
-				.toTypedArray()
-			for (key in keyPair) {
-				val pinKeyPair = key.split(";".toRegex()).dropLastWhile { it.isEmpty() }
-					.toTypedArray()
-				if (pinKeyPair.size == 2) {
-					lpAuthenticationParams.addCertificatePinningKey(pinKeyPair[0], pinKeyPair[1])
-				}
-			}
-		}
-		return lpAuthenticationParams;
-	}
-
-
 }
