@@ -165,6 +165,24 @@
     <color name="agent_bubble_pci_form_invitation_icon_tint_color">@color/lp_consumer_action_highLight_color</color>
     <color name="agent_bubble_pci_form_invitation_progressBar_color">@color/lp_progress_bar_color</color>
 
+    <!-- bot bubble-->
+    <dimen name="bot_bubble_stroke_width">@dimen/agent_bubble_stroke_width</dimen>
+    <color name="bot_bubble_stroke_color">@color/agent_bubble_message_text_color</color>
+    <color name="bot_bubble_message_text_color">@color/agent_bubble_message_text_color</color>
+    <color name="bot_bubble_message_link_text_color">@color/agent_bubble_message_link_text_color</color>
+    <color name="bot_bubble_message_markdown_hyperlink_text_color">@color/agent_bubble_message_markdown_hyperlink_text_color</color>
+    <color name="bot_bubble_timestamp_text_color">@color/agent_bubble_timestamp_text_color</color>
+    <color name="bot_bubble_background_color">@color/agent_bubble_background_color</color>
+    <color name="bot_avatar_background_color">@color/agent_avatar_background_color</color>
+    <color name="bot_avatar_icon_color">@color/agent_avatar_icon_color</color>
+
+    <!--bot bubble link_preview -->
+    <color name="bot_bubble_link_preview_background_color">@color/agent_bubble_link_preview_background_color</color>
+    <color name="bot_bubble_link_preview_title_text_color">@color/agent_bubble_link_preview_title_text_color</color>
+    <color name="bot_bubble_link_preview_description_text_color">@color/agent_bubble_link_preview_description_text_color</color>
+    <color name="bot_bubble_link_preview_background_stroke_color">@color/agent_bubble_link_preview_background_stroke_color</color>
+    <dimen name="bot_bubble_link_preview_background_stroke_width">@dimen/agent_bubble_link_preview_background_stroke_width</dimen>
+
     <!-- voice Message Bubble-->
     <color name="consumer_bubble_voice_play_button_color">#EDEDED</color>
     <color name="consumer_bubble_voice_pause_button_color">#EDEDED</color>
@@ -251,6 +269,7 @@
     <color name="feedback_fragment_submit_btn_stroke_enabled">@color/lp_feedback_option_selectedColor</color>
     <color name="feedback_fragment_submit_btn_stroke_disabled">@color/lp_colorSurface</color>
 
+    <!-- Quick Replies -->
     <dimen name="quick_reply_button_radius">1dp</dimen>
 
 </resources>
