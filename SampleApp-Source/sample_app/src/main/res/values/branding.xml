@@ -59,6 +59,8 @@
 
     <!--Conversation Screen menu item-->
     <bool name="clear_history_menu_item_visible">true</bool>
+    <bool name="lp_urgency_menu_item_visible">true</bool>
+    <bool name="lp_resolve_conversation_menu_item_visible">true</bool>
 
     <!--    Both Activity and Fragment mode-->
 
@@ -187,6 +189,24 @@
     <color name="agent_bubble_pci_form_invitation_title_text_color">@color/lp_colorOnSurface</color>
     <color name="agent_bubble_pci_form_invitation_icon_tint_color">@color/lp_consumer_action_highLight_color</color>
     <color name="agent_bubble_pci_form_invitation_progressBar_color">@color/lp_progress_bar_color</color>
+
+    <!-- bot bubble-->
+    <dimen name="bot_bubble_stroke_width">@dimen/agent_bubble_stroke_width</dimen>
+    <color name="bot_bubble_stroke_color">@color/agent_bubble_message_text_color</color>
+    <color name="bot_bubble_message_text_color">@color/agent_bubble_message_text_color</color>
+    <color name="bot_bubble_message_link_text_color">@color/agent_bubble_message_link_text_color</color>
+    <color name="bot_bubble_message_markdown_hyperlink_text_color">@color/agent_bubble_message_markdown_hyperlink_text_color</color>
+    <color name="bot_bubble_timestamp_text_color">@color/agent_bubble_timestamp_text_color</color>
+    <color name="bot_bubble_background_color">@color/agent_bubble_background_color</color>
+    <color name="bot_avatar_background_color">@color/agent_avatar_background_color</color>
+    <color name="bot_avatar_icon_color">@color/agent_avatar_icon_color</color>
+
+    <!--bot bubble link_preview -->
+    <color name="bot_bubble_link_preview_background_color">@color/agent_bubble_link_preview_background_color</color>
+    <color name="bot_bubble_link_preview_title_text_color">@color/agent_bubble_link_preview_title_text_color</color>
+    <color name="bot_bubble_link_preview_description_text_color">@color/agent_bubble_link_preview_description_text_color</color>
+    <color name="bot_bubble_link_preview_background_stroke_color">@color/agent_bubble_link_preview_background_stroke_color</color>
+    <dimen name="bot_bubble_link_preview_background_stroke_width">@dimen/agent_bubble_link_preview_background_stroke_width</dimen>
 
     <!-- voice Message Bubble-->
     <color name="consumer_bubble_voice_play_button_color">#EDEDED</color>
@@ -368,12 +388,9 @@
     <string name="client_only_masking_regex" translatable="false" />
     <string name="real_time_masking_regex" translatable="false" />
 
-    <!-- Menu options configuration -->
     <!--Clear History-->
     <bool name="clear_history_show_confirm_dialog">true</bool>
-    <bool name="lp_urgency_menu_item_visible">true</bool>
-    <bool name="lp_resolve_conversation_menu_item_visible">true</bool>
-    <!-- Menu options configuration -->
+    <bool name="lp_hide_welcome_message_on_clear_history">false</bool>
 
     <!--Photo sharing-->
     <bool name="enable_photo_sharing">true</bool>
@@ -462,25 +479,14 @@
     <!--  0: Close (Default). 1: Hangup  -->
     <integer name="lp_voice_video_end_call_button_type">0</integer>
 
-    <!--  When set to true, SDK won't show default welcome message when cleared history -->
-    <bool name="lp_hide_welcome_message_on_clear_history">false</bool>
-
-    <!-- Message status/timestamp configurations -->
+    <!-- Message status/timestamp settings -->
     <bool name="lp_enable_read_receipts">true</bool>
     <bool name="lp_enable_timestamps">true</bool>
     <dimen name="lp_timestamps_font_size">12sp</dimen>
 
-    <bool name="lp_pusher_clear_badge_count">false</bool>
-
-    <!-- Enable or disable separators for auto closed conversations -->
+    <!--Boolean flag to represent divider for auto-closed conversations.-->
     <bool name="lp_enable_conversation_resolved_separator_on_auto_close">false</bool>
 
-    <!-- Enable or disable announcement of SDK events using live region in Polite mode -->
-    <bool name="lp_announce_events_with_live_region">true</bool>
-
-    <bool name="lp_cobrowse_picture_in_picture_enabled">false</bool>
-
-    <!--Carousel navigation buttons -->
     <integer name="lp_sc_carousel_navigation_buttons_appearance">0</integer>
     <color name="lp_carousel_navigation_button_color">@color/lp_consumer_action_highLight_color</color>
     <dimen name="lp_carousel_navigation_button_size">36dp</dimen>
@@ -492,4 +498,11 @@
 
     <!--File sharing flow-->
     <bool name="lp_is_consumer_file_caption_enabled">true</bool>
+
+    <!--Connection status bar appearance-->
+    <bool name="lp_is_connection_bar_enabled">true</bool>
+
+    <!--Announcement order of message's contents -->
+    <bool name="lp_announce_message_status_first">false</bool>
+
 </resources>
