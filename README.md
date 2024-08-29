@@ -35,15 +35,15 @@ The Android Mobile Messaging SDK version 5.23.0 uses:
     - [`bot_bubble_link_preview_background_stroke_color`](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#bot_bubble_link_preview_background_stroke_color). Default value is the same as `agent_bubble_link_preview_background_stroke_color`
     - [`bot_bubble_link_preview_background_stroke_width`](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#bot_bubble_link_preview_background_stroke_width). Default value is the same as `agent_bubble_link_preview_background_stroke_width`
 
-- Provided new API call to get a list of active conversation for particular consumer. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#checkactiveconversations) for more info.
+- Provided new API call to get a list of active conversations for particular consumer. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#checkactiveconversations) for more info.
 
-- A new SDK callback is provided that will be invoked when welcome message option gets tapped. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-callbacks-index.html#on-welcome-message-option-tapped) for more info.
+- A new SDK callback is provided that will be invoked when the welcome message option gets tapped. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-callbacks-index.html#on-welcome-message-option-tapped) for more info.
 
 
 ## Enhancements
 
-- Added new flag `lp_is_connection_bar_enabled` to show/hide connection banner. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_is_connection_bar_enabled) for more info.
-- Added new flag `lp_announce_message_status_first` to manage order of message's description's data. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_message_status_first) for more info.
+- Added a new flag `lp_is_connection_bar_enabled` to show/hide the connection banner. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_is_connection_bar_enabled) for more info.
+- Added a new flag `lp_announce_message_status_first` to manage the order of the message's description's data. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_announce_message_status_first) for more info.
 - Improved accessibility announcements and added missed content descriptions for Date Picker component.
 
 ## Bugs fixed
