@@ -96,7 +96,7 @@ public class MessagingActivity extends AppCompatActivity {
 
 		binding.phoneNumber.setText(SampleAppStorage.getInstance(this).getPhoneNumber());
 
-		binding.authCode.setText(SampleAppStorage.getInstance(this).getAuthCode());
+		binding.authToken.setText(SampleAppStorage.getInstance(this).getAuthToken());
 
 		binding.publicKey.setText(SampleAppStorage.getInstance(this).getPublicKey());
 
@@ -464,14 +464,14 @@ public class MessagingActivity extends AppCompatActivity {
 		String firstName = binding.firstName.getText().toString().trim();
 		String lastName = binding.lastName.getText().toString().trim();
 		String phoneNumber = binding.phoneNumber.getText().toString().trim();
-		String authCode = binding.authCode.getText().toString().trim();
+		String authToken = binding.authToken.getText().toString().trim();
 		String publicKey = binding.publicKey.getText().toString().trim();
 		SampleAppStorage.getInstance(this).setAuthenticateItemPosition(binding.authTypeSpinner.getSelectedItemPosition());
 		SampleAppStorage.getInstance(this).setAuthenticateTypeOrdinal(getAuthType().ordinal());
 		SampleAppStorage.getInstance(this).setFirstName(firstName);
 		SampleAppStorage.getInstance(this).setLastName(lastName);
 		SampleAppStorage.getInstance(this).setPhoneNumber(phoneNumber);
-		SampleAppStorage.getInstance(this).setAuthCode(authCode);
+		SampleAppStorage.getInstance(this).setAuthToken(authToken);
 		SampleAppStorage.getInstance(this).setPublicKey(publicKey);
 		SampleAppStorage.getInstance(this).setPerformStepUpAuthentication(binding.checkBoxStepupAuthen.isChecked());
 

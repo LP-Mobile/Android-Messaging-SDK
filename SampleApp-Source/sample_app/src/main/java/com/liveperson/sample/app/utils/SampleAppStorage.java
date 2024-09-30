@@ -18,6 +18,8 @@ public class SampleAppStorage {
 
     public static final String SDK_SAMPLE_APP_ID = "com.liveperson.sdksample";
     public static final String SDK_SAMPLE_FCM_APP_ID = "com.liveperson.sdksampleFcm";
+    public static final String SDK_AUTH_FLOW_CODE = "SDK_AUTH_FLOW_CODE";
+    public static final String SDK_AUTH_FLOW_IMPLICIT = "SDK_AUTH_FLOW_IMPLICIT";
 
     private static final String AUTHENTICATE_ITEM_POSITION = "authenticate_item_position";
     private static final String AUTHENTICATE_TYPE_ORDINAL = "AUTHENTICATE_TYPE_ORDINAL";
@@ -28,12 +30,13 @@ public class SampleAppStorage {
     private static final String FIRST_NAME = "first_name";
     private static final String LAST_NAME = "last_name";
     private static final String PHONE_NUMBER = "phone_number";
-    private static final String AUTH_CODE = "auth_code";
+    private static final String AUTH_TOKEN = "auth_token";
     private static final String SDK_MODE = "sdk_mode";
     private static final String BRAND_ID = "brand_id";
     private static final String PUBLIC_KEY = "public_key";
     private static final String CODE_VERIFIER = "CODE_VERIFIER";
     private static final String PKCE_ENABLED = "PKCE_ENABLED";
+    private static final String AUTH_FLOW = "AUTH_FLOW";
 
     // Monitoring
 	private static final String APP_INSTALL_ID = "app_install_id";
@@ -94,8 +97,8 @@ public class SampleAppStorage {
         mDefaultSharedPreferences.edit().putString(PHONE_NUMBER, phoneNumber).apply();
     }
 
-    public void setAuthCode(String authCode) {
-        mDefaultSharedPreferences.edit().putString(AUTH_CODE, authCode).apply();
+    public void setAuthToken(String authToken) {
+        mDefaultSharedPreferences.edit().putString(AUTH_TOKEN, authToken).apply();
     }
 
     public void setCodeVerifier(String code_verifier) {
@@ -112,6 +115,14 @@ public class SampleAppStorage {
 
     public boolean isPkceEnabled() {
         return mDefaultSharedPreferences.getBoolean(PKCE_ENABLED, false);
+    }
+
+    public void setAuthFlow(String authFlow) {
+        mDefaultSharedPreferences.edit().putString(AUTH_FLOW, authFlow);
+    }
+
+    public String getAuthFlow() {
+        return mDefaultSharedPreferences.getString(AUTH_FLOW, "");
     }
 
     public void setPublicKey(String publicKey) {
@@ -134,8 +145,8 @@ public class SampleAppStorage {
         return mDefaultSharedPreferences.getString(PHONE_NUMBER, "");
     }
 
-    public String getAuthCode() {
-        return mDefaultSharedPreferences.getString(AUTH_CODE, "");
+    public String getAuthToken() {
+        return mDefaultSharedPreferences.getString(AUTH_TOKEN, "");
     }
 
     public String getPublicKey(){

@@ -21,15 +21,33 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <RadioButton
+                android:id="@+id/radioCodeFlow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/code"/>
+
+            <RadioButton
+                android:id="@+id/radioImplicitFlow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/implicit"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/auth_code_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Auth Code:">
+                android:hint="Auth Token:">
 
                 <EditText
-                    android:id="@+id/auth_code"
+                    android:id="@+id/auth_token"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

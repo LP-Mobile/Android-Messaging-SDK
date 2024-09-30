@@ -69,5 +69,7 @@
     <string name="enable_offline_messaging">Enable offline messaging\n</string>
     <string name="text_generate_pkce">Generate PKCE</string>
     <string name="pkce_enable">Enable PKCE</string>
+    <string name="code">Code</string>
+    <string name="implicit">Implicit</string>
 
 </resources>

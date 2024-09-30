@@ -75,15 +75,18 @@ public class SampleAppUtils {
      */
     public static LPAuthenticationParams createLPAuthParams(Context context) {
         LPAuthenticationType authType = SampleAppStorage.getInstance(context).getAuthenticateType();
-        String authCode = SampleAppStorage.getInstance(context).getAuthCode();
+        String authToken = SampleAppStorage.getInstance(context).getAuthToken();
         String publicKey = SampleAppStorage.getInstance(context).getPublicKey();
+        String authFlow = SampleAppStorage.getInstance(context).getAuthFlow();
 
         LPAuthenticationParams lpAuthenticationParams = new LPAuthenticationParams(authType);
-        lpAuthenticationParams.setAuthKey(authCode);
         lpAuthenticationParams.setPerformStepUp(authType.equals(LPAuthenticationType.AUTH) &&
                 SampleAppStorage.getInstance(context).getPerformStepUpAuthentication());
-//		lpAuthenticationParams.setHostAppJWT("host app jwt");  // Set the jwt if needed.
-
+        if (SampleAppStorage.SDK_AUTH_FLOW_CODE.equals(authFlow)) {
+            lpAuthenticationParams.setAuthKey(authToken);
+        } else if (SampleAppStorage.SDK_AUTH_FLOW_IMPLICIT.equals(authFlow)) {
+		    lpAuthenticationParams.setHostAppJWT(authToken);
+        }
         if (!publicKey.trim().isEmpty()) {
             String[] keyPair = publicKey.split(",");
             for (String key : keyPair) {

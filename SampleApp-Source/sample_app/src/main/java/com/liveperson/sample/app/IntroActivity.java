@@ -135,7 +135,7 @@ public class IntroActivity extends AppCompatActivity {
 							public void onLogoutSucceed() {
 								enableLogoutButton(false);
 
-								SampleAppStorage.getInstance(IntroActivity.this).setAuthCode("");
+								SampleAppStorage.getInstance(IntroActivity.this).setAuthToken("");
 
 								// Reset badge
 								NotificationUI.setBadge(IntroActivity.this, 0);

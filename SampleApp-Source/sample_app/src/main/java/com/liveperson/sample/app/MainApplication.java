@@ -365,7 +365,7 @@ public class MainApplication extends Application {
         showToast("onTokenExpired ");
 
         // Change authentication key here:
-        LivePerson.reconnect(new LPAuthenticationParams().setAuthKey(SampleAppStorage.getInstance(getApplicationContext()).getAuthCode()));
+        LivePerson.reconnect(new LPAuthenticationParams().setAuthKey(SampleAppStorage.getInstance(getApplicationContext()).getAuthToken()));
     }
 
     private void onError(TaskType type, String message) {
