@@ -74,6 +74,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".proactive.PendingProactiveMessagesActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:exported="false"/>
+
         <!-- FCM -->
         <!-- This service is used to receive any incoming message -->
         <service android:name=".push.fcm.MyFirebaseMessagingService"

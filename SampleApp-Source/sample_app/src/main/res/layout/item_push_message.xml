@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textColor="@android:color/holo_orange_dark"
+        android:text="Memorial Day Savings In Every Aisle" />
+
+    <TextView
+        android:id="@+id/pushMessageId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="058f17d4-bf2c-5541-e350-9ed24707eadf" />
+
+    <Button
+        android:id="@+id/setTapped"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Tapped"
+        />
+</LinearLayout>

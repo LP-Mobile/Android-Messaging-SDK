@@ -151,10 +151,16 @@ public class MainApplication extends Application {
 						onUserActionOnPreventedPermission(preventedPermissionType);
 						break;
 
-					case LivePersonIntents.ILivePersonIntentAction.LP_ON_STRUCTURED_CONTENT_LINK_CLICKED:
-						String uri = LivePersonIntents.getLinkUri(intent);
-						onStructuredContentLinkClicked(uri);
-						break;
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_STRUCTURED_CONTENT_LINK_CLICKED: {
+                        String uri = LivePersonIntents.getLinkUri(intent);
+                        onStructuredContentLinkClicked(uri);
+                        break;
+                    }
+                    case LivePersonIntents.ILivePersonIntentAction.LP_ON_MESSAGE_LINK_CLICKED: {
+                        String uri = LivePersonIntents.getLinkUri(intent);
+                        onLinkClicked(uri);
+                        break;
+                    }
 				}
 
             }
@@ -381,4 +387,8 @@ public class MainApplication extends Application {
 	private void onStructuredContentLinkClicked(String uri) {
 		showToast("onStructuredContentLinkClicked. Uri: " + uri);
 	}
+
+    private void onLinkClicked(String uri) {
+        showToast("onLinkClicked. Uri: " + uri);
+    }
 }
