@@ -387,4 +387,8 @@ public class MainApplication extends Application {
 	private void onStructuredContentLinkClicked(String uri) {
 		showToast("onStructuredContentLinkClicked. Uri: " + uri);
 	}
+
+    private void onLinkClicked(String uri) {
+        showToast("onLinkClicked. Uri: " + uri);
+    }
 }
