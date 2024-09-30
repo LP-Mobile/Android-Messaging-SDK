@@ -72,4 +72,8 @@
     <string name="code">Code</string>
     <string name="implicit">Implicit</string>
 
+    <string name="title_fetch_messages">Fetch Messages</string>
+    <string name="title_clear_others">clearOthers</string>
+    <string name="no_pending_messages">No pending messages</string>
+
 </resources>

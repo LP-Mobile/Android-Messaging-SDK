@@ -391,6 +391,13 @@
             android:layout_margin="10dp"
             android:text="VERSION" />
 
+        <Button
+            android:id="@+id/pendingPRMSGButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Show Pending Proactive Messages"
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 

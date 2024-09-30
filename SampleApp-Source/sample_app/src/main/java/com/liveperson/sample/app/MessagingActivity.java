@@ -36,6 +36,7 @@ import com.liveperson.messaging.sdk.api.LivePerson;
 import com.liveperson.messaging.sdk.api.model.ConsumerProfile;
 import com.liveperson.sample.app.databinding.ActivityMessagingBinding;
 import com.liveperson.sample.app.notification.NotificationUI;
+import com.liveperson.sample.app.proactive.PendingProactiveMessagesActivity;
 import com.liveperson.sample.app.utils.SampleAppStorage;
 import com.liveperson.sample.app.utils.SampleAppUtils;
 
@@ -112,6 +113,11 @@ public class MessagingActivity extends AppCompatActivity {
 		binding.visitorId.setText(getIntent().getStringExtra(VISITOR_ID_KEY));
 
 		binding.engagementContextId.setText(getIntent().getStringExtra(ENGAGEMENT_CONTEXT_ID_KEY));
+
+		binding.pendingPRMSGButton.setOnClickListener(v -> {
+			storeData();
+			startActivity(new Intent(this, PendingProactiveMessagesActivity.class));
+		});
 
 		updateTime();
 		initLocaleSpinner();
