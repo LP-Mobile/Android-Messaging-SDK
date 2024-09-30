@@ -499,10 +499,15 @@
     <!--File sharing flow-->
     <bool name="lp_is_consumer_file_caption_enabled">true</bool>
 
+    <bool name="lp_announce_message_status_first">false</bool>
+
     <!--Connection status bar appearance-->
     <bool name="lp_is_connection_bar_enabled">true</bool>
 
-    <!--Announcement order of message's contents -->
-    <bool name="lp_announce_message_status_first">false</bool>
+    <!-- Flag to enable/disable custom link movement -->
+    <bool name="lp_message_link_as_callback">false</bool>
+
+    <!-- Proactive messages -->
+    <bool name="lp_fetch_pending_proactive_messages">false</bool>
 
 </resources>
