@@ -19,14 +19,14 @@ The Android Mobile Messaging SDK version 5.23.1 uses:
 
 ## New features
 
-- Provided new API call to get a list of active conversation for particular consumer. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#checkactiveconversations) for more info.
-- Provided new API and configuration to get pending proactive messages. Check [getPendingProactiveMessages](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#getpendingproactivemessages) and [lp_fetch_pending_proactive_messages](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_fetch_pending_proactive_messages) for more info.
+- Provided a new API call to get a list of active conversations for a particular consumer. Check this [link](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#checkactiveconversations) for more info.
+- Provided a new API and configuration to get pending proactive messages. Check [getPendingProactiveMessages](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-messaging-api.html#getpendingproactivemessages) and [lp_fetch_pending_proactive_messages](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_fetch_pending_proactive_messages) for more info.
 - Provided a new [callback](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-apis-callbacks-index.html#remote-message-link-clicked) and [flag](https://developers.liveperson.com/mobile-app-messaging-sdk-for-android-sdk-attributes-5-0-and-above.html#lp_message_link_as_callback) to intercept consumer's link tapped.
 
 ## Enhancements
 
 - Resolved possible security vulnerabilities.
-- SDK now supports markdown hyperkink in a welcome message (included Proactive message).
+- SDK now supports markdown hyperlink in a welcome message (included Proactive message).
 
 ## Bugs fixed
 
